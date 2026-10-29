@@ -112,7 +112,7 @@ filters either, it searches all of BizBuySell.
 | `establishedAfter` | — | Only businesses established after this year. |
 | `sellerFinancingOnly`, `sbaPrequalifiedOnly`, `realEstateIncludedOnly`, `homeBasedOnly`, `absenteeOwnerOnly`, `priceReducedOnly` | `false` | Keep only listings with that property. |
 | `includeRelocatable` | `false` | When filtering by state, also include businesses from elsewhere that can relocate there. |
-| `sortBy` | `"relevance"` | `"newest"`, `"price-low"`, `"price-high"`, `"cash-flow-high"` or `"ebitda-high"`. With a limit, you get the top results in this order. |
+| `sortBy` | `"relevance"` | `"newest"`, `"price-low"`, `"price-high"` or `"cash-flow-high"`. With a limit, you get the top results in this order. |
 | `maxResults` | `100` | Records to return across everything. `0` means no limit. |
 | `monitorMode` | `false` | Return only listings that are new or changed since the previous run (see below). |
 | `monitorName` | derived | Names the monitoring history; by default it's derived from the URLs and filters. |
@@ -273,6 +273,13 @@ listing found by several searches is returned once.
 **Undisclosed numbers are `null`, never `0`.** Sellers often leave cash flow, revenue or EBITDA
 blank. `priceToCashFlow`, `priceToEbitda` and `priceToRevenue` are filled only when both
 numbers exist.
+
+**The cash-flow filter falls back to EBITDA.** BizBuySell matches a listing with no disclosed
+cash flow on its EBITDA, so `minCashFlow` / `maxCashFlow` can return listings with
+`cashFlow: null`. Listings whose disclosed cash flow is outside the range are dropped.
+
+**Startups have no location.** BizBuySell includes startups in state searches with `state`,
+`city` and the address set to `null`.
 
 **Confidential details are `null` too.** If a seller hides the street address, city or
 website on BizBuySell, those fields stay empty, and so do the coordinates.
